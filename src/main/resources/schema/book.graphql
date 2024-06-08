@@ -1,0 +1,23 @@
+extend type Query {
+    getBooks(count: Int, offset: Int): [Book]
+}
+
+extend type Mutation {
+    createBook(input: BookInput): Book
+    updateBook(input: BookInput): Book
+    deleteBook(id: ID): Boolean
+}
+
+type Book {
+    id: ID!
+    title: String
+    year: Int
+    author: Author
+}
+
+input BookInput {
+    id: ID!
+    title: String
+    year: Int
+    author: AuthorInput
+}

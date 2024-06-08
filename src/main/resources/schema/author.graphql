@@ -1,0 +1,22 @@
+extend type Query {
+    getAuthors(count: Int, offset: Int): [Author]
+}
+
+extend type Mutation {
+    createAuthor(input: AuthorInput): Author
+    updateAuthor(input: AuthorInput): Author
+    deleteAuthor(id: Int): Boolean
+}
+
+input AuthorInput {
+    id: ID!
+    firstName: String
+    lastName: String
+}
+
+type Author {
+    id: ID!
+    firstName: String
+    lastName: String
+    books: [Book]
+}

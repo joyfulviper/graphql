@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: asdf
+  docker:
+    compose:
+      start:
+        command: up
+  threads:
+    virtual:
+      enabled: true
+  graphql:
+    schema:
+      printer:
+        enabled: true
+    graphiql:
+      enabled: true
+
