@@ -2,7 +2,7 @@
 ### R(Query)
 ```graphql
 {
-	getBooks(count: 3, offset: 0) {
+    getBooks(count: 3, offset: 0) {
     id
   	title
     author {
