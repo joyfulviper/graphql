@@ -5,7 +5,6 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import static com.asd.asdfasdfasdfa.service.BookService.AUTHOR;
  * 넷플릭스 방식 @link https://github.com/Netflix/dgs-examples-java
  */
 @DgsComponent
-@RequiredArgsConstructor
 public class AuthorService {
 
     @DgsMutation
