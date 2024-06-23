@@ -13,7 +13,9 @@ import graphql.ExecutionResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ class BookControllerTest {
 
     @SpyBean
     BookService bookService;
+
+    @MockBean
+    ServletWebServerApplicationContext server;
 
     @Test
     void getBooks() {
