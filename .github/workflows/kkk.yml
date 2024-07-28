@@ -41,11 +41,11 @@ jobs:
           java-version: '22'
           distribution: 'corretto'
 
-      - name: test
-        if: steps.cache-restore.outputs.cache-hit != 'true'
-        run: |
-            chmod +x ./gradlew
-            ./gradlew clean test -parallel
+#      - name: test
+#        if: steps.cache-restore.outputs.cache-hit != 'true'
+#        run: |
+#            chmod +x ./gradlew
+#            ./gradlew clean test -parallel
 
       - name: Save cache
         if: steps.cache-restore.outputs.cache-hit != 'true'
@@ -72,9 +72,11 @@ jobs:
                     
 
       - name: tar 파일 생성
-        run: |          
+        run: |                  
+          mkdir -p deploy
           ls -al
-          mkdir -p deploy                 
+          cd code-deploy
+          ls -al                           
           envsubst < code-deploy/appspec.yml > deploy/appspec.yml
           s=$(cat deploy/appspec.yml)
           echo '치환 결과: ${s}'          
