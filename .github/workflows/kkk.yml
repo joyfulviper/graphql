@@ -2,6 +2,10 @@ name: 배포자동화
 on:
   workflow_dispatch
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
