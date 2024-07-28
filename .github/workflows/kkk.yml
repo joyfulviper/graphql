@@ -30,7 +30,6 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ steps.branch_name.outputs.branch }}-${{ steps.last_commit.outputs.message }}
 
-
       - name: Set up JDK 22
         if: steps.cache-restore.outputs.cache-hit != 'true'
         uses: actions/setup-java@v4
@@ -51,7 +50,46 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ steps.branch_name.outputs.branch }}-${{ steps.last_commit.outputs.message }}
 
-      - name: kkk
-        if: steps.cache-restore.outputs.cache-hit == 'true'
-        run : echo '캐시 적중~!'
+      - name: AWS 권한 획득
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ secrets.CODE_DEPLOY_AWS_REGION }}
 
+      - name: 빌드 & 앱 이름 설정
+        run: |
+          ./gradlew bootJar -x test
+          app_name=$(ls build/libs/*.jar | xargs -n 1 basename | sed 's/\.jar$//')
+          echo "app_name=$app_name" >> $GITHUB_ENV
+          echo "app_name: $app_name"
+          export DEPLOY_SH_LOCATION=/home/ec2-user/test
+          export AFTER_INSTALL_SH=/home/ec2-user/test/after-install.sh
+          export APPLICATION_START_SH=/home/ec2-user/test/start.sh
+                    
+
+      - name: tar 파일 생성
+        run: |          
+          mkdir -p deploy                 
+          envsubst < code-deploy/appspec.yml > deploy/appspec.yml
+          s=$(cat deploy/appspec.yml)
+          echo '치환 결과: ${s}'          
+          envsubst < code-deploy/start.sh > deploy/start.sh
+          a=$(cat deploy/start.sh)
+          echo '치환 결과: ${a}'
+          cp code-deploy/after-install.sh deploy/
+          cp build/libs/${{ env.app_name }}.jar deploy/
+          tar -cvf build/libs/${{ env.app_name }}.tar -C deploy .
+
+      - name: s3 업로드
+        run: |
+          aws s3 cp build/libs/${{ env.app_name }}.tar s3://${{ secrets.CODE_DEPLOY_S3_BUCKET }}/${{ env.app_name }}.tar
+
+      - name: CodeDeploy 배포
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ secrets.CODE_DEPLOY_APP_NAME }} \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name ${{ secrets.CODE_DEPLOY_DEPLOY_GROUP }} \
+            --s3-location bucket=${{ secrets.CODE_DEPLOY_S3_BUCKET }},bundleType=tar,key=${{ env.app_name }}.tar \
+            --region ${{ secrets.CODE_DEPLOY_AWS_REGION }} \
+            --description "Deploy ${{ env.app_name }} from GitHub Actions"

@@ -9,7 +9,6 @@ import org.springframework.shell.standard.ShellOption;
 @ShellComponent
 @RequiredArgsConstructor
 public class Hello {
-
     private final ServletWebServerApplicationContext webServerAppCtxt;
 
     @ShellMethod(key = "hello", value = "This is echo your message")
