@@ -86,7 +86,7 @@ jobs:
 
       - name: s3 업로드
         run: |
-          aws s3 cp build/libs/${{ env.app_name }}.tar s3://${{ secrets.CODE_DEPLOY_S3_BUCKET }}/${{ env.app_name }}.tar
+          aws s3 cp build/libs/${{ env.app_name }}.tar s3://everyones-garden/jar/${{ env.app_name }}.tar
 
       - name: CodeDeploy 배포
         run: |
