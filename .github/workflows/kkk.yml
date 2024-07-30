@@ -70,8 +70,8 @@ jobs:
       - name: tar 파일 생성
         run: |
           export DEPLOY_SH_LOCATION=/home/ec2-user/test
-          export AFTER_INSTALL_SH=/home/ec2-user/test/after-install.sh
-          export APPLICATION_START_SH=/home/ec2-user/test/start.sh                  
+          export AFTER_INSTALL_SH=after-install.sh
+          export APPLICATION_START_SH=start.sh                  
           mkdir -p deploy                      
           envsubst < code-deploy/appspec.yml > deploy/appspec.yml
           s=$(cat deploy/appspec.yml)
