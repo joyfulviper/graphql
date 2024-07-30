@@ -76,10 +76,10 @@ jobs:
           mkdir -p deploy                      
           envsubst < code-deploy/appspec.yml > deploy/appspec.yml
           s=$(cat deploy/appspec.yml)
-          echo '치환 결과: ${s}'          
+          echo "치환 결과 (appspec.yml): ${s}"   
           envsubst < code-deploy/start.sh > deploy/start.sh
           a=$(cat deploy/start.sh)
-          echo '치환 결과: ${a}'
+          echo "치환 결과 (start.sh): ${a}"
           cp code-deploy/after-install.sh deploy/
           cp build/libs/${{ env.app_name }}.jar deploy/
           tar -cvf build/libs/${{ env.app_name }}.tar -C deploy .
