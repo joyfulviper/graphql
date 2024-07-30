@@ -94,6 +94,6 @@ jobs:
             --application-name ${{ secrets.CODE_DEPLOY_APP_NAME }} \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name ${{ secrets.CODE_DEPLOY_DEPLOY_GROUP }} \
-            --s3-location bucket=everyones-garden,bundleType=tar,key=${{ env.app_name }}.tar \
+            --s3-location bucket=everyones-garden,bundleType=tar,key=jar/${{ env.app_name }}.tar \
             --region ${{ secrets.CODE_DEPLOY_AWS_REGION }} \
             --description "Deploy ${{ env.app_name }} from GitHub Actions"
