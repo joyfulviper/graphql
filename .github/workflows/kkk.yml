@@ -65,14 +65,13 @@ jobs:
           ./gradlew bootJar -x test
           app_name=$(ls build/libs/*.jar | xargs -n 1 basename | sed 's/\.jar$//')
           echo "app_name=$app_name" >> $GITHUB_ENV
-          echo "app_name: $app_name"
-          export DEPLOY_SH_LOCATION=/home/ec2-user/test
-          export AFTER_INSTALL_SH=/home/ec2-user/test/after-install.sh
-          export APPLICATION_START_SH=/home/ec2-user/test/start.sh
-                    
+          echo "app_name: $app_name"          
 
       - name: tar 파일 생성
-        run: |                  
+        run: |
+          export DEPLOY_SH_LOCATION=/home/ec2-user/test
+          export AFTER_INSTALL_SH=/home/ec2-user/test/after-install.sh
+          export APPLICATION_START_SH=/home/ec2-user/test/start.sh                  
           mkdir -p deploy                      
           envsubst < code-deploy/appspec.yml > deploy/appspec.yml
           s=$(cat deploy/appspec.yml)
